@@ -24,6 +24,7 @@
     roomAvatar: $('#roomAvatar'),
     copyRoom: $('#copyRoom'),
     leaveBtn: $('#leaveBtn'),
+    installBtn: $('#installBtn'),
     toast: $('#toast'),
   };
 
@@ -697,9 +698,76 @@
     }
   });
 
-  const inviteRoom = sanitizeRoom(new URLSearchParams(location.search).get('room') || '');
+  const installState = {
+    prompt: null,
+    standalone:
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true,
+    ios: /iphone|ipad|ipod/i.test(navigator.userAgent),
+  };
+
+  function refreshInstallButton() {
+    els.installBtn.hidden =
+      installState.standalone || (!installState.prompt && !installState.ios);
+  }
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    installState.prompt = event;
+    refreshInstallButton();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installState.prompt = null;
+    installState.standalone = true;
+    refreshInstallButton();
+    showToast('Пулс е инсталиран на устройството.');
+  });
+
+  els.installBtn.addEventListener('click', async () => {
+    if (!installState.prompt) {
+      if (installState.ios) {
+        showToast('В Safari: бутон „Сподели“ → „Към начален екран“.');
+      }
+      return;
+    }
+
+    installState.prompt.prompt();
+    const choice = await installState.prompt.userChoice;
+    installState.prompt = null;
+    refreshInstallButton();
+
+    if (choice.outcome === 'accepted') {
+      showToast('Пулс се инсталира — ще го намериш на началния екран.');
+    }
+  });
+
+  window.addEventListener('offline', () => {
+    showToast('Няма интернет връзка — ще се свържем отново автоматично.');
+  });
+
+  window.addEventListener('online', () => {
+    showToast('Интернет връзката е възстановена.');
+  });
+
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {
+        /* приложението работи и без офлайн кеш */
+      });
+    });
+  }
+
+  registerServiceWorker();
+
+  const params = new URLSearchParams(location.search);
+  const inviteRoom = sanitizeRoom(params.get('room') || '');
+  const wantsNewRoom = params.get('new') === '1';
+
   els.nameInput.value = remember.read('puls.name');
-  els.roomInput.value = inviteRoom || remember.read('puls.room') || randomRoom();
+  els.roomInput.value =
+    inviteRoom || (wantsNewRoom ? randomRoom() : remember.read('puls.room') || randomRoom());
   autoGrow();
   els.nameInput.focus();
 })();

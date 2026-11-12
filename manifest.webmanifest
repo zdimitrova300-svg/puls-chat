@@ -1,0 +1,52 @@
+{
+  "id": "./",
+  "name": "Пулс — чат на живо",
+  "short_name": "Пулс",
+  "description": "Модерен чат на живо за двама души. Сподели кода на стаята и пишете в реално време.",
+  "lang": "bg",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#070a14",
+  "theme_color": "#070a14",
+  "categories": ["social", "communication"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Нова стая",
+      "short_name": "Нова стая",
+      "description": "Започни чат в нова стая",
+      "url": "./?new=1",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

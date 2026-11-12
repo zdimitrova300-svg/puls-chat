@@ -104,7 +104,10 @@ body {
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding:
+    calc(24px + env(safe-area-inset-top, 0px))
+    24px
+    calc(24px + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
 }
 
@@ -302,6 +305,30 @@ textarea:focus {
   animation: livePulse 2s ease-out infinite;
 }
 
+.install-pill {
+  cursor: pointer;
+  font-family: inherit;
+  color: #e3dcff;
+  border-color: rgba(124, 92, 255, 0.45);
+  background: rgba(124, 92, 255, 0.14);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.install-pill svg {
+  width: 14px;
+  height: 14px;
+}
+
+.install-pill:hover {
+  background: rgba(124, 92, 255, 0.26);
+  border-color: rgba(124, 92, 255, 0.72);
+  transform: translateY(-1px);
+}
+
+.install-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
 @keyframes livePulse {
   0% {
     box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
@@ -355,7 +382,10 @@ textarea:focus {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 15px clamp(16px, 3vw, 24px);
+  padding:
+    calc(15px + env(safe-area-inset-top, 0px))
+    clamp(16px, 3vw, 24px)
+    15px;
   border-bottom: 1px solid var(--line);
   background: rgba(9, 13, 26, 0.35);
 }
@@ -820,7 +850,10 @@ textarea:focus-visible {
 
 @media (max-width: 560px) {
   .join-screen {
-    padding: 16px;
+    padding:
+      calc(16px + env(safe-area-inset-top, 0px))
+      16px
+      calc(16px + env(safe-area-inset-bottom, 0px));
   }
 
   .join-card {
@@ -848,7 +881,10 @@ textarea:focus-visible {
   }
 
   .chat-header {
-    padding: 13px 15px;
+    padding:
+      calc(13px + env(safe-area-inset-top, 0px))
+      15px
+      13px;
   }
 
   .composer {
